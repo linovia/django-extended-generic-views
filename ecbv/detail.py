@@ -1,4 +1,3 @@
-import re
 
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 from django.http import Http404
@@ -86,7 +85,11 @@ class SingleObjectMixin(object):
             return None
 
     def get_context_data(self, **kwargs):
-        context = kwargs
+        super_self = super(SingleObjectMixin, self)
+        context = {}
+        if hasattr(super_self, 'get_context_data'):
+            context = super_self.get_context_data(**kwargs)
+        context.update(kwargs)
         context_object_name = self.get_context_object_name(self.object)
         if context_object_name:
             context[context_object_name] = self.object

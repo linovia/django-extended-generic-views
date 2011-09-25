@@ -90,21 +90,26 @@ class MultipleObjectMixin(object):
         queryset = kwargs.pop('object_list')
         page_size = self.get_paginate_by(queryset)
         context_object_name = self.get_context_object_name(queryset)
+        super_class = super(MultipleObjectMixin, self)
+        if hasattr(super_class, 'get_context_data'):
+            context = super_class.get_context_data(**kwargs)
+        else:
+            context = {}
         if page_size:
             paginator, page, queryset, is_paginated = self.paginate_queryset(queryset, page_size)
-            context = {
+            context.update({
                 'paginator': paginator,
                 'page_obj': page,
                 'is_paginated': is_paginated,
                 'object_list': queryset
-            }
+            })
         else:
-            context = {
+            context.update({
                 'paginator': None,
                 'page_obj': None,
                 'is_paginated': False,
                 'object_list': queryset
-            }
+            })
         context.update(kwargs)
         if context_object_name is not None:
             context[context_object_name] = queryset

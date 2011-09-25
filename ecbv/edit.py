@@ -46,6 +46,8 @@ class FormMixin(object):
         return kwargs
 
     def get_context_data(self, **kwargs):
+        if hasattr(super(FormMixin, self), 'get_context_data'):
+            return super(FormMixin, self).get_context_data(**kwargs)
         return kwargs
 
     def get_success_url(self):
@@ -113,7 +115,11 @@ class ModelFormMixin(FormMixin, SingleObjectMixin):
         return super(ModelFormMixin, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
-        context = kwargs
+        super_self = super(ModelFormMixin, self)
+        context = {}
+        if hasattr(super_self, 'get_context_data'):
+            context = super_self.get_context_data(**kwargs)
+        context.update(kwargs)
         if self.object:
             context['object'] = self.object
             context_object_name = self.get_context_object_name(self.object)

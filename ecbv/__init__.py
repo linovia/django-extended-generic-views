@@ -6,6 +6,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView, CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 
+import detail, edit, list, base
 
 class GenericViewError(Exception):
     """A problem in a generic view."""

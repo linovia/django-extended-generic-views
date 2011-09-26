@@ -8,7 +8,19 @@ from django.utils.decorators import classonlymethod
 logger = getLogger('django.request')
 
 
-class View(object):
+class BaseMixin(object):
+    def setup(self, request, *args, **kwargs):
+        if hasattr(super(BaseMixin, self), 'setup'):
+            super(BaseMixin, self).super(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = {}
+        if hasattr(super(BaseMixin, self), 'get_context_data'):
+            context = super(BaseMixin, self).get_context_data(**kwargs)
+        return context
+
+
+class View(BaseMixin):
     """
     Intentionally simple parent class for all views. Only implements
     dispatch-by-method and simple sanity checking.
@@ -53,11 +65,6 @@ class View(object):
         update_wrapper(view, cls.dispatch, assigned=())
         return view
 
-    def setup(self, request, *args, **kwargs):
-        if hasattr(super(View, self), 'setup'):
-            super(View, self).super(request, *args, **kwargs)
-        return
-
     def dispatch(self, request, *args, **kwargs):
         # Try to dispatch to the right method; if a method doesn't exist,
         # defer to the error handler. Also defer to the error handler if the
@@ -83,7 +90,7 @@ class View(object):
         return http.HttpResponseNotAllowed(allowed_methods)
 
 
-class TemplateResponseMixin(object):
+class TemplateResponseMixin(BaseMixin):
     """
     A mixin that can be used to render a template.
     """

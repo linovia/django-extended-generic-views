@@ -3,10 +3,10 @@ from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 from django.http import Http404
 from django.utils.encoding import smart_str
 from django.utils.translation import ugettext as _
-from .base import TemplateResponseMixin, View
+from .base import TemplateResponseMixin, View, BaseMixin
 
 
-class SingleObjectMixin(object):
+class SingleObjectMixin(BaseMixin):
     """
     Provides the ability to retrieve a single object for further manipulation.
     """
@@ -96,8 +96,7 @@ class SingleObjectMixin(object):
         return context
 
     def setup(self, request, *args, **kwargs):
-        if hasattr(super(SingleObjectMixin, self), 'setup'):
-            super(SingleObjectMixin, self).setup(request, *args, **kwargs)
+        super(SingleObjectMixin, self).setup(request, *args, **kwargs)
         self.object = self.get_object()
 
 

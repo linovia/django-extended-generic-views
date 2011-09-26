@@ -1,12 +1,12 @@
 from django.forms import models as model_forms
 from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponseRedirect
-from .base import TemplateResponseMixin, View
+from .base import TemplateResponseMixin, View, BaseMixin
 from .detail import (SingleObjectMixin,
                         SingleObjectTemplateResponseMixin, BaseDetailView)
 
 
-class FormMixin(object):
+class FormMixin(BaseMixin):
     """
     A mixin that provides a way to show and handle a form in a request.
     """
@@ -46,9 +46,7 @@ class FormMixin(object):
         return kwargs
 
     def get_context_data(self, **kwargs):
-        if hasattr(super(FormMixin, self), 'get_context_data'):
-            return super(FormMixin, self).get_context_data(**kwargs)
-        return kwargs
+        return super(FormMixin, self).get_context_data(**kwargs)
 
     def get_success_url(self):
         if self.success_url:
@@ -115,10 +113,7 @@ class ModelFormMixin(FormMixin, SingleObjectMixin):
         return super(ModelFormMixin, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
-        super_self = super(ModelFormMixin, self)
-        context = {}
-        if hasattr(super_self, 'get_context_data'):
-            context = super_self.get_context_data(**kwargs)
+        context = super(ModelFormMixin, self).get_context_data(**kwargs)
         context.update(kwargs)
         if self.object:
             context['object'] = self.object
@@ -139,7 +134,7 @@ class ProcessFormView(View):
         return self.render_to_response(self.get_context_data(form=form))
 
     def post(self, request, *args, **kwargs):
-        super(ProcessFormView).super(request, *args, **kwargs)
+        self.setup(request, *args, **kwargs)
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         if form.is_valid():

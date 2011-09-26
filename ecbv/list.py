@@ -5,10 +5,10 @@ from django.core.exceptions import ImproperlyConfigured
 from django.http import Http404
 from django.utils.encoding import smart_str
 from django.utils.translation import ugettext as _
-from .base import TemplateResponseMixin, View
+from .base import TemplateResponseMixin, View, BaseMixin
 
 
-class MultipleObjectMixin(object):
+class MultipleObjectMixin(BaseMixin):
     allow_empty = True
     queryset = None
     model = None
@@ -90,11 +90,7 @@ class MultipleObjectMixin(object):
         queryset = kwargs.pop('object_list')
         page_size = self.get_paginate_by(queryset)
         context_object_name = self.get_context_object_name(queryset)
-        super_class = super(MultipleObjectMixin, self)
-        if hasattr(super_class, 'get_context_data'):
-            context = super_class.get_context_data(**kwargs)
-        else:
-            context = {}
+        context = super(MultipleObjectMixin, self).get_context_data(**kwargs)
         if page_size:
             paginator, page, queryset, is_paginated = self.paginate_queryset(queryset, page_size)
             context.update({
@@ -119,9 +115,7 @@ class MultipleObjectMixin(object):
 class BaseListView(MultipleObjectMixin, View):
     def setup(self, request, *args, **kwargs):
         self.object_list = self.get_queryset()
-        if hasattr(super(MultipleObjectMixin, self), 'setup'):
-            super(MultipleObjectMixin, self).setup()
-
+        super(MultipleObjectMixin, self).setup()
 
     def get(self, request, *args, **kwargs):
         self.setup(request, *args, **kwargs)

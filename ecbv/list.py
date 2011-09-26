@@ -5,7 +5,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.http import Http404
 from django.utils.encoding import smart_str
 from django.utils.translation import ugettext as _
-from django.views.generic.base import TemplateResponseMixin, View
+from .base import TemplateResponseMixin, View
 
 
 class MultipleObjectMixin(object):
@@ -124,7 +124,7 @@ class BaseListView(MultipleObjectMixin, View):
 
 
     def get(self, request, *args, **kwargs):
-        super(BaseListView).super(request, *args, **kwargs)
+        self.setup(request, *args, **kwargs)
         allow_empty = self.get_allow_empty()
         if not allow_empty and len(self.object_list) == 0:
             raise Http404(_(u"Empty list and '%(class_name)s.allow_empty' is False.")

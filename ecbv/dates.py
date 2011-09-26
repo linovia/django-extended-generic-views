@@ -5,9 +5,9 @@ from django.core.exceptions import ImproperlyConfigured
 from django.http import Http404
 from django.utils.encoding import force_unicode
 from django.utils.translation import ugettext as _
-from django.views.generic.base import View
-from django.views.generic.detail import BaseDetailView, SingleObjectTemplateResponseMixin
-from django.views.generic.list import MultipleObjectMixin, MultipleObjectTemplateResponseMixin
+from .base import View
+from .detail import BaseDetailView, SingleObjectTemplateResponseMixin
+from .list import MultipleObjectMixin, MultipleObjectTemplateResponseMixin
 
 class YearMixin(object):
     year_format = '%Y'
@@ -174,7 +174,7 @@ class BaseDateListView(MultipleObjectMixin, DateMixin, View):
             super(MultipleObjectMixin, self).setup()
 
     def get(self, request, *args, **kwargs):
-        super(BaseDateListView).super(request, *args, **kwargs)
+        self.setup(request, *args, **kwargs)
         context = self.get_context_data(object_list=self.object_list,
                                         date_list=self.date_list)
         context.update(self.extra_context)

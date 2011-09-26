@@ -3,7 +3,7 @@ from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 from django.http import Http404
 from django.utils.encoding import smart_str
 from django.utils.translation import ugettext as _
-from django.views.generic.base import TemplateResponseMixin, View
+from .base import TemplateResponseMixin, View
 
 
 class SingleObjectMixin(object):
@@ -96,16 +96,15 @@ class SingleObjectMixin(object):
         return context
 
     def setup(self, request, *args, **kwargs):
-        print 'SingleObjectMixin'
         if hasattr(super(SingleObjectMixin, self), 'setup'):
-            super(SingleObjectMixin, self).setup()
+            super(SingleObjectMixin, self).setup(request, *args, **kwargs)
         self.object = self.get_object()
 
 
 class BaseDetailView(SingleObjectMixin, View):
 
     def get(self, request, *args, **kwargs):
-        super(BaseDetailView).super(request, *args, **kwargs)
+        self.setup(request, *args, **kwargs)
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
 

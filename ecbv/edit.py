@@ -1,8 +1,8 @@
 from django.forms import models as model_forms
 from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponseRedirect
-from django.views.generic.base import TemplateResponseMixin, View
-from django.views.generic.detail import (SingleObjectMixin,
+from .base import TemplateResponseMixin, View
+from .detail import (SingleObjectMixin,
                         SingleObjectTemplateResponseMixin, BaseDetailView)
 
 
@@ -133,7 +133,7 @@ class ProcessFormView(View):
     A mixin that processes a form on POST.
     """
     def get(self, request, *args, **kwargs):
-        super(ProcessFormView).super(request, *args, **kwargs)
+        self.setup(request, *args, **kwargs)
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         return self.render_to_response(self.get_context_data(form=form))
@@ -175,11 +175,11 @@ class BaseCreateView(ModelFormMixin, ProcessFormView):
         self.object = None
 
     def get(self, request, *args, **kwargs):
-        super(BaseCreateView).super(request, *args, **kwargs)
+        self.setup(request, *args, **kwargs)
         return super(BaseCreateView, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        super(BaseCreateView).super(request, *args, **kwargs)
+        self.setup(request, *args, **kwargs)
         return super(BaseCreateView, self).post(request, *args, **kwargs)
 
 
@@ -201,11 +201,11 @@ class BaseUpdateView(ModelFormMixin, ProcessFormView):
         self.object = self.get_object()
 
     def get(self, request, *args, **kwargs):
-        super(BaseUpdateView).super(request, *args, **kwargs)
+        self.setup(request, *args, **kwargs)
         return super(BaseUpdateView, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        super(BaseUpdateView).super(request, *args, **kwargs)
+        self.setup(request, *args, **kwargs)
         return super(BaseUpdateView, self).post(request, *args, **kwargs)
 
 

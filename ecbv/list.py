@@ -117,8 +117,10 @@ class MultipleObjectMixin(object):
 
 
 class BaseListView(MultipleObjectMixin, View):
-    def get(self, request, *args, **kwargs):
+    def setup(self, request, *args, **kwargs):
         self.object_list = self.get_queryset()
+
+    def get(self, request, *args, **kwargs):
         allow_empty = self.get_allow_empty()
         if not allow_empty and len(self.object_list) == 0:
             raise Http404(_(u"Empty list and '%(class_name)s.allow_empty' is False.")

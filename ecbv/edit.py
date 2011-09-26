@@ -169,12 +169,13 @@ class BaseCreateView(ModelFormMixin, ProcessFormView):
 
     Using this base class requires subclassing to provide a response mixin.
     """
-    def get(self, request, *args, **kwargs):
+    def setup(self, request, *args, **kwargs):
         self.object = None
+
+    def get(self, request, *args, **kwargs):
         return super(BaseCreateView, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        self.object = None
         return super(BaseCreateView, self).post(request, *args, **kwargs)
 
 
@@ -192,12 +193,13 @@ class BaseUpdateView(ModelFormMixin, ProcessFormView):
 
     Using this base class requires subclassing to provide a response mixin.
     """
-    def get(self, request, *args, **kwargs):
+    def setup(self, request, *args, **kwargs):
         self.object = self.get_object()
+
+    def get(self, request, *args, **kwargs):
         return super(BaseUpdateView, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
         return super(BaseUpdateView, self).post(request, *args, **kwargs)
 
 

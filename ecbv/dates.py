@@ -170,6 +170,8 @@ class BaseDateListView(MultipleObjectMixin, DateMixin, View):
 
     def setup(self, request, *args, **kwargs):
         self.date_list, self.object_list, self.extra_context = self.get_dated_items()
+        if hasattr(super(MultipleObjectMixin, self), 'setup'):
+            super(MultipleObjectMixin, self).setup()
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(object_list=self.object_list,

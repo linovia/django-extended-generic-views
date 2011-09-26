@@ -119,6 +119,9 @@ class MultipleObjectMixin(object):
 class BaseListView(MultipleObjectMixin, View):
     def setup(self, request, *args, **kwargs):
         self.object_list = self.get_queryset()
+        if hasattr(super(MultipleObjectMixin, self), 'setup'):
+            super(MultipleObjectMixin, self).setup()
+
 
     def get(self, request, *args, **kwargs):
         allow_empty = self.get_allow_empty()

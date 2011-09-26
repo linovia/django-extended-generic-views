@@ -95,10 +95,13 @@ class SingleObjectMixin(object):
             context[context_object_name] = self.object
         return context
 
+    def setup(self, request, *args, **kwargs):
+        if hasattr(super(SingleObjectMixin, self), 'setup'):
+            super(SingleObjectMixin, self).setup()
+        self.object = self.get_object()
+
 
 class BaseDetailView(SingleObjectMixin, View):
-    def setup(self, request, *args, **kwargs):
-        self.object = self.get_object()
 
     def get(self, request, **kwargs):
         context = self.get_context_data(object=self.object)

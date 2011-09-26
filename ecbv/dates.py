@@ -174,6 +174,7 @@ class BaseDateListView(MultipleObjectMixin, DateMixin, View):
             super(MultipleObjectMixin, self).setup()
 
     def get(self, request, *args, **kwargs):
+        super(BaseDateListView).super(request, *args, **kwargs)
         context = self.get_context_data(object_list=self.object_list,
                                         date_list=self.date_list)
         context.update(self.extra_context)

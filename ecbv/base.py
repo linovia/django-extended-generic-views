@@ -122,6 +122,7 @@ class TemplateView(TemplateResponseMixin, View):
         }
 
     def get(self, request, *args, **kwargs):
+        super(TemplateView).super(request, *args, **kwargs)
         context = self.get_context_data(**kwargs)
         return self.render_to_response(context)
 
@@ -151,6 +152,7 @@ class RedirectView(View):
             return None
 
     def get(self, request, *args, **kwargs):
+        super(RedirectView).super(request, *args, **kwargs)
         url = self.get_redirect_url(**kwargs)
         if url:
             if self.permanent:

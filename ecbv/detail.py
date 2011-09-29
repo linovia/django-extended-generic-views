@@ -85,14 +85,13 @@ class SingleObjectMixin(BaseMixin):
             return None
 
     def get_context_data(self, **kwargs):
-        super_self = super(SingleObjectMixin, self)
-        context = {}
-        if hasattr(super_self, 'get_context_data'):
-            context = super_self.get_context_data(**kwargs)
+        context = super(SingleObjectMixin, self).get_context_data(**kwargs)
         context.update(kwargs)
         context_object_name = self.get_context_object_name(self.object)
         if context_object_name:
             context[context_object_name] = self.object
+        # explicitly add object to the context
+        context['object'] = self.object
         return context
 
     def setup(self, request, *args, **kwargs):

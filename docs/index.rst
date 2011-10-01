@@ -11,6 +11,8 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   What does it bring to the table<extra>
+
 Indices and tables
 ==================
 

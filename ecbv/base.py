@@ -4,6 +4,9 @@ from django.template.response import TemplateResponse
 from django.utils.functional import update_wrapper
 from django.utils.log import getLogger
 from django.utils.decorators import classonlymethod
+from django.core.urlresolvers import reverse
+
+from ecbv.utils import ecbv_reverse
 
 logger = getLogger('django.request')
 
@@ -142,6 +145,7 @@ class RedirectView(View):
     """
     permanent = True
     url = None
+    view = None
     query_string = False
 
     def get_redirect_url(self, **kwargs):
@@ -151,11 +155,17 @@ class RedirectView(View):
         are provided as kwargs to this method.
         """
         if self.url:
+            url = self.url
+        elif self.view:
+            kwargs['toto'] = 5
+            url = ecbv_reverse(self.view, kwargs=kwargs)
+        else:
+            return None
+
+        if url:
             args = self.request.META["QUERY_STRING"]
             if args and self.query_string:
-                url = "%s?%s" % (self.url, args)
-            else:
-                url = self.url
+                url = "%s?%s" % (url, args)
             return url % kwargs
         else:
             return None

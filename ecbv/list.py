@@ -115,7 +115,7 @@ class MultipleObjectMixin(BaseMixin):
 class BaseListView(MultipleObjectMixin, View):
     def setup(self, request, *args, **kwargs):
         self.object_list = self.get_queryset()
-        super(MultipleObjectMixin, self).setup()
+        super(MultipleObjectMixin, self).setup(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         self.setup(request, *args, **kwargs)

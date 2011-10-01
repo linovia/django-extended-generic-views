@@ -1,3 +1,4 @@
+from .base import BaseMixin
 from .base import View, TemplateView, RedirectView
 from .dates import (ArchiveIndexView, YearArchiveView, MonthArchiveView,
                                      WeekArchiveView, DayArchiveView, TodayArchiveView,

@@ -14,6 +14,8 @@ class SingleObjectMixin(BaseMixin):
     queryset = None
     slug_field = 'slug'
     context_object_name = None
+    pk_name = None
+    slug_name = None
 
     def get_object(self, queryset=None):
         """
@@ -28,8 +30,10 @@ class SingleObjectMixin(BaseMixin):
             queryset = self.get_queryset()
 
         # Next, try looking up by primary key.
-        pk = self.kwargs.get('pk', None)
-        slug = self.kwargs.get('slug', None)
+        pk_name = getattr(self, 'pk_name', 'pk')
+        slug_name = getattr(self, 'slug_name', 'slug')
+        pk = self.kwargs.get(pk_name, None)
+        slug = self.kwargs.get(slug_name, None)
         if pk is not None:
             queryset = queryset.filter(pk=pk)
 

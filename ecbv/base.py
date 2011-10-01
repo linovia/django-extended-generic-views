@@ -11,7 +11,7 @@ logger = getLogger('django.request')
 class BaseMixin(object):
     def setup(self, request, *args, **kwargs):
         if hasattr(super(BaseMixin, self), 'setup'):
-            super(BaseMixin, self).super(request, *args, **kwargs)
+            super(BaseMixin, self).setup(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = {}

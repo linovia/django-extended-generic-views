@@ -157,7 +157,6 @@ class RedirectView(View):
         if self.url:
             url = self.url
         elif self.view:
-            kwargs['toto'] = 5
             url = ecbv_reverse(self.view, kwargs=kwargs)
         else:
             return None

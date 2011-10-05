@@ -1,4 +1,3 @@
-
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 from django.http import Http404
 from django.utils.encoding import smart_str
@@ -14,8 +13,8 @@ class SingleObjectMixin(BaseMixin):
     queryset = None
     slug_field = 'slug'
     context_object_name = None
-    pk_name = None
-    slug_name = None
+    slug_url_kwarg = 'slug'
+    pk_url_kwarg = 'pk'
 
     def get_object(self, queryset=None):
         """
@@ -30,10 +29,8 @@ class SingleObjectMixin(BaseMixin):
             queryset = self.get_queryset()
 
         # Next, try looking up by primary key.
-        pk_name = getattr(self, 'pk_name', 'pk')
-        slug_name = getattr(self, 'slug_name', 'slug')
-        pk = self.kwargs.get(pk_name, None)
-        slug = self.kwargs.get(slug_name, None)
+        pk = self.kwargs.get(self.pk_url_kwarg, None)
+        slug = self.kwargs.get(self.slug_url_kwarg, None)
         if pk is not None:
             queryset = queryset.filter(pk=pk)
 

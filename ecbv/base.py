@@ -4,7 +4,6 @@ from django.template.response import TemplateResponse
 from django.utils.functional import update_wrapper
 from django.utils.log import getLogger
 from django.utils.decorators import classonlymethod
-from django.core.urlresolvers import reverse
 
 from ecbv.utils import ecbv_reverse
 

@@ -27,7 +27,7 @@ Then in order to match the poll_id, you'll set your views.py::
 
     class PollDetail(ecbv.DetailView):
         model = models.Poll
-        pk_name = 'poll_id'
+        pk_url_kwarg = 'poll_id'
 
 
 That way, if you browse to ``/poll/4/`` you'll be able to see the Poll which
@@ -59,12 +59,12 @@ Then in your views.py you can define your classes::
 
     class PollDetail(ecbv.DetailView):
         model = models.Poll
-        pk_name = 'poll_id'
+        pk_url_kwarg = 'poll_id'
 
 
     class ChoiceDetail(ecbv.DetailView):
         model = models.Choice
-        pk_name = 'choice_id'
+        pk_url_kwarg = 'choice_id'
 
 
 Easily extended context
@@ -114,7 +114,7 @@ permissions::
     import ecbv
 
 
-    class ProjectMixin(generic.BaseMixin):
+    class ProjectMixin(ecbv.BaseMixin):
         def setup(self, request, *args, **kwargs):
             super(ProjectMixin, self).setup(request, *args, **kwargs)
             if not self.object.project_id == kwargs['project_id']:
@@ -129,8 +129,9 @@ permissions::
             return super(ProjectMixin, self).get_context_data(**kwargs)
 
 
-    class Milestone(ProjectMixin, generic.DetailView):
+    class Milestone(ProjectMixin, ecbv.DetailView):
         model = models.Milestone
+
 
 In that example, only the owner will be allowed to access the milestone
 associated with the project.

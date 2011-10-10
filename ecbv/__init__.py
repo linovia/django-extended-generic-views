@@ -7,7 +7,7 @@ from .detail import DetailView
 from .edit import FormView, CreateView, UpdateView, DeleteView
 from .list import ListView
 
-import detail, edit, list, base
+import detail, edit, list, base, complex
 
 
 class GenericViewError(Exception):

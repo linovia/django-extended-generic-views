@@ -67,6 +67,8 @@ class ModelFormMixin(FormMixin, SingleObjectMixin):
     """
     A mixin that provides a way to show and handle a modelform in a request.
     """
+    exclude = None
+    fields = None
 
     def get_form_class(self):
         """
@@ -86,7 +88,7 @@ class ModelFormMixin(FormMixin, SingleObjectMixin):
                 # Try to get a queryset and extract the model class
                 # from that
                 model = self.get_queryset().model
-            return model_forms.modelform_factory(model)
+            return model_forms.modelform_factory(model, fields=self.fields, exclude=self.exclude)
 
     def get_form_kwargs(self):
         """
@@ -170,11 +172,9 @@ class BaseCreateView(ModelFormMixin, ProcessFormView):
         self.object = None
 
     def get(self, request, *args, **kwargs):
-        self.setup(request, *args, **kwargs)
         return super(BaseCreateView, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        self.setup(request, *args, **kwargs)
         return super(BaseCreateView, self).post(request, *args, **kwargs)
 
 
@@ -196,11 +196,9 @@ class BaseUpdateView(ModelFormMixin, ProcessFormView):
         self.object = self.get_object()
 
     def get(self, request, *args, **kwargs):
-        self.setup(request, *args, **kwargs)
         return super(BaseUpdateView, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        self.setup(request, *args, **kwargs)
         return super(BaseUpdateView, self).post(request, *args, **kwargs)
 
 

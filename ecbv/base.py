@@ -16,9 +16,10 @@ class BaseMixin(object):
             super(BaseMixin, self).setup(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        context = {}
         if hasattr(super(BaseMixin, self), 'get_context_data'):
             context = super(BaseMixin, self).get_context_data(**kwargs)
+        else:
+            context = kwargs
         return context
 
 
